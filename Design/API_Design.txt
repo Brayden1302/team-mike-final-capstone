@@ -1,0 +1,74 @@
+First Sprint
+
+path /addBook
+method POST
+description add a book to the database (admin only)
+status codes
+201 created
+400 bad request
+
+path /books
+method GET
+description get all books from library / database
+status codes
+200
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Later
+
+path /readingList
+method GET
+description get a users reading list
+status codes
+200
+
+path /readingList
+method POST
+description add a book to a users reading list
+201
+400
+
+
+
+path /forum
+method GET
+description get all forum pages from database
+status codes
+200
+
+path /forum
+method POST
+description add a forum page to the database
+status codes
+201 
+400
+
+path /forum/{id}
+method GET
+description get all messages for the forum
+status codes
+200
+
+path /forum/{id}
+method POST
+description add a message to a specific forum
+status codes
+201 
+400
