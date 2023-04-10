@@ -1,0 +1,25 @@
+insert into publishers(name) 
+values('test')
+
+
+insert into books(title, publisher_id ,date_added, isbn, page_count, description, publish_date, image_link) 
+values('title', (select publisher_id from publishers where name = 'test'), current_date, '1235nasdfa', 300, 'this book is really nice', '10/10/1996', 'google.com' );
+
+
+select * from books_categories;
+
+insert into categories(name)
+values('horror');
+
+insert into books_categories(category_id, book_id)
+values((select category_id from categories where name = 'horror'), (select book_id from books where isbn = '1235nasdfa'));
+
+insert into authors(name)
+values('bill bill');
+
+select * from books_authors
+
+insert into books_authors(book_id, author_id)
+values ((select book_id from books where isbn = '1235nasdfa'), (select author_id from authors where name = 'bill bill'))
+
+
