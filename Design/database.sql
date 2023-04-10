@@ -36,8 +36,7 @@ CREATE TABLE users_books
 CREATE TABLE authors
 (
 	author_id serial,
-	first_name varchar(40),
-	last_name varchar(40),
+	name varchar(100),
 	
 	CONSTRAINT pk_authors PRIMARY KEY (author_id)
 );
