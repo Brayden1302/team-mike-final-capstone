@@ -7,6 +7,9 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.awt.print.Book;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class JdbcLibraryDao implements LibraryDao {
@@ -86,4 +89,51 @@ public class JdbcLibraryDao implements LibraryDao {
 
         return book;
     }
+
+    @Override
+    public List<BookDto> getBooks() {
+        List<BookDto> books = new ArrayList<>();
+        String Sql = "SELECT books.book_id, books.title ,  books.date_added ,  books.isbn ,  books.page_count ,  books.description ,  books.publish_date ,  books.image_link, publishers.name " +
+                "FROM books " +
+                "JOIN publishers ON books.publisher_id = publishers.publisher_id";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(Sql);
+        while ( results.next()) {
+            BookDto book = mapRowToBook(results);
+            String categoriesSql ="SELECT name " +
+                    "FROM categories " +
+                    "JOIN books_categories ON categories.category_id = books_categories.category_id " + "WHERE book_id = ?;";
+            SqlRowSet rowResults = jdbcTemplate.queryForRowSet(categoriesSql, book.getBookId());
+            List<String> categories = new ArrayList<>();
+            while (rowResults.next()){
+                categories.add(rowResults.getString("name"));
+            }
+            book.setCategories(categories.toArray(new String[0]));
+            String authorSql = " SELECT name " +
+                    "FROM authors " +
+                    "JOIN books_authors ON authors.author_id = books_authors.author_id " +
+                    "WHERE book_id = ?;";
+            SqlRowSet authorRow = jdbcTemplate.queryForRowSet(authorSql, book.getBookId());
+            List <String> authors = new ArrayList<>();
+            while (authorRow.next()){
+                authors.add(authorRow.getString("name"));
+            }
+            book.setAuthors(authors.toArray(new String[0]));
+            books.add(book);
+        }
+        return books;
+    }
+    private BookDto mapRowToBook(SqlRowSet results) {
+        BookDto book = new BookDto();
+        book.setTitle(results.getString("title"));
+        book.setIsbn(results.getString("isbn"));
+        book.setPublisher(results.getString("name"));
+        book.setDescription(results.getString("description"));
+        book.setDateAdded((results.getDate("date_added")));
+        book.setPageCount(results.getInt("page_count"));
+        book.setPublishedDate(results.getDate("publish_date"));
+        book.setImageLink(results.getString("image_link"));
+        book.setBookId(results.getInt("book_id"));
+        return book;
+    }
+
 }
