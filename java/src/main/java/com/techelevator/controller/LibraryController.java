@@ -3,10 +3,13 @@ package com.techelevator.controller;
 import com.techelevator.dao.LibraryDao;
 import com.techelevator.model.BookDto;
 import com.techelevator.model.DuplicateBookException;
+import com.techelevator.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
@@ -34,6 +37,11 @@ public class LibraryController {
         return dao.getBooks();
     }
 
+    @RequestMapping(path = "/search", method = RequestMethod.POST)
+    public Date userSearchDate(Principal user) {
+        return dao.addSearchDate( user.getName());
+
+    }
 
 
 }
