@@ -3,6 +3,7 @@ package com.techelevator.dao;
 import com.fasterxml.jackson.databind.deser.std.StringArrayDeserializer;
 import com.techelevator.model.BookDto;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
@@ -28,19 +29,22 @@ public class JdbcLibraryDao implements LibraryDao {
         String[] categories = book.getCategories();
         for (String category : categories) {
             String categorySql = " SELECT category_id FROM categories WHERE name= ?";
-            Integer categoryId = jdbcTemplate.queryForObject(categorySql, Integer.class, category);
-            if (categoryId != 0 && categoryId != null) {
+//            Integer categoryId = jdbcTemplate.queryForObject(categorySql, Integer.class, category);
+
+            SqlRowSet row = jdbcTemplate.queryForRowSet(categorySql, category);
+            if (row.next()) {
+                Integer categoryId = row.getInt("category_id");
                 String bookCategorySql = " insert into books_categories(category_id, book_id) " +
                         "values ( ?, ? );";
-                jdbcTemplate.queryForRowSet(bookCategorySql, categoryId, bookId);
+                jdbcTemplate.update(bookCategorySql, categoryId, bookId);
 
             } else{
                 String addCategorySql = " insert into categories(name) "  +
                         "values (?) RETURNING category_id; ";
-                categoryId = jdbcTemplate.queryForObject(addCategorySql, Integer.class, category);
+                Integer categoryId = jdbcTemplate.queryForObject(addCategorySql, Integer.class, category);
                 String bookCategorySql = " insert into books_categories(category_id, book_id) " +
                         "values ( ?, ? );";
-                jdbcTemplate.queryForRowSet(bookCategorySql, categoryId, bookId);
+                jdbcTemplate.update(bookCategorySql, categoryId, bookId);
             }
 
         }
