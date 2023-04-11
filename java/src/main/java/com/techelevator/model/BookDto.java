@@ -12,6 +12,24 @@ public class BookDto {
     Date publishedDate;
     String[] categories;
     String imageLink;
+    Date dateAdded;
+    int bookId;
+
+    public int getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(int bookId) {
+        this.bookId = bookId;
+    }
+
+    public Date getDateAdded() {
+        return dateAdded;
+    }
+
+    public void setDateAdded(Date dateAdded) {
+        this.dateAdded = dateAdded;
+    }
 
     public String getIsbn() {
         return isbn;

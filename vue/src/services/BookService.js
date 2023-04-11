@@ -8,5 +8,12 @@ export default {
 
     addBook(book) {
         return axios.post('/books', book)
+    },
+    getbooks() {
+        return axios.get('/books')
+    },
+    updateSearch(user){
+        return axios.post('/search', user)
     }
+
 }
