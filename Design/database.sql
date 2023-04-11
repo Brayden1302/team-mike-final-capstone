@@ -16,7 +16,7 @@ CREATE TABLE books
 	date_added date NOT NULL,
 	isbn varchar(60) NOT NULL,
 	page_count int NOT NULL,
-	description varchar(1000),
+	description varchar(5000),
 	publish_date date NOT NULL,
 	image_link varchar(200),
 	
@@ -36,7 +36,7 @@ CREATE TABLE users_books
 CREATE TABLE authors
 (
 	author_id serial,
-	name varchar(100),
+	name varchar(50),
 	
 	CONSTRAINT pk_authors PRIMARY KEY (author_id)
 );
@@ -78,4 +78,6 @@ CREATE TABLE publishers
 );
 
 COMMIT;
+
+SELECT * FROM books
 
