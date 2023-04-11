@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin
 @RestController
 public class LibraryController {
@@ -27,6 +29,10 @@ public class LibraryController {
         return dao.addBook(book);
     }
 
+    @RequestMapping(path = "/books", method = RequestMethod.GET)
+    public List<BookDto> getBooks() {
+        return dao.getBooks();
+    }
 
 
 
