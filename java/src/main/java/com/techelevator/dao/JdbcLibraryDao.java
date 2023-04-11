@@ -39,16 +39,12 @@ public class JdbcLibraryDao implements LibraryDao {
             String bookSql =
                     "insert into books(title, publisher_id ,date_added, isbn, page_count, description, publish_date, image_link) " +
                             "values(?, ? , current_date, ?, ?, ?, ?, ? ) RETURNING book_id;";
-             bookId = jdbcTemplate.queryForObject(bookSql, Integer.class, book.getTitle(),
+            bookId = jdbcTemplate.queryForObject(bookSql, Integer.class, book.getTitle(),
                     publisherId, book.getIsbn(), book.getPageCount(), book.getDescription(), book.getPublishedDate(), book.getImageLink());
         }
         String[] categories = book.getCategories();
         for (String category : categories) {
             String categorySql = " SELECT category_id FROM categories WHERE name= ?";
-
-            SqlRowSet row = jdbcTemplate.queryForRowSet(categorySql, category);
-            if (row.next()) {
-                Integer categoryId = row.getInt("category_id");
             SqlRowSet rowSet = jdbcTemplate.queryForRowSet(categorySql, category);
             if (rowSet.next()) {
                 Integer categoryId = rowSet.getInt("category_id");
@@ -66,7 +62,7 @@ public class JdbcLibraryDao implements LibraryDao {
             }
 
         }
-            String[] authors = book.getAuthors();
+        String[] authors = book.getAuthors();
         for (String author : authors) {
             String authorSql = " SELECT author_id FROM authors WHERE name = ?";
             SqlRowSet rowSet = jdbcTemplate.queryForRowSet(authorSql, author);
