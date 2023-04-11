@@ -2,16 +2,10 @@ package com.techelevator.controller;
 
 import com.techelevator.dao.LibraryDao;
 import com.techelevator.model.BookDto;
-import com.techelevator.model.RegisterUserDto;
-import com.techelevator.model.User;
+import com.techelevator.model.DuplicateBookException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-
-import javax.validation.Valid;
-import java.awt.print.Book;
 
 @CrossOrigin
 @RestController
@@ -29,7 +23,7 @@ public class LibraryController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(value = "/books", method = RequestMethod.POST)
-    public BookDto addBook( @RequestBody BookDto book) {
+    public BookDto addBook( @RequestBody BookDto book) throws DuplicateBookException {
         return dao.addBook(book);
     }
 
