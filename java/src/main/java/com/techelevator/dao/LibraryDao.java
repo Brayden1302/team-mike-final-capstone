@@ -1,11 +1,10 @@
 package com.techelevator.dao;
 
 import com.techelevator.model.BookDto;
-
-import java.awt.print.Book;
+import com.techelevator.model.DuplicateBookException;
 
 public interface LibraryDao {
 
-    BookDto addBook(BookDto book);
+    BookDto addBook(BookDto book) throws DuplicateBookException;
 
 }
