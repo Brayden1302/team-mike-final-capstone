@@ -1,16 +1,15 @@
 package com.techelevator.controller;
 
 import com.techelevator.dao.LibraryDao;
+import com.techelevator.dao.UserDao;
 import com.techelevator.model.BookDto;
 import com.techelevator.model.DuplicateBookException;
-import com.techelevator.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
@@ -19,6 +18,8 @@ public class LibraryController {
 
     @Autowired
     private LibraryDao dao;
+    @Autowired
+    private UserDao userDao;
 
     @RequestMapping(path="/hello", method= RequestMethod.GET)
     public String helloWorld() {
@@ -36,6 +37,22 @@ public class LibraryController {
     @RequestMapping(path = "/books", method = RequestMethod.GET)
     public List<BookDto> getBooks() {
         return dao.getBooks();
+    }
+
+    @RequestMapping(path = "/readinglist", method = RequestMethod.POST)
+    public void updateReadingList(@RequestBody int bookId, Principal user) {
+         dao.addToReadingList(bookId, userDao.findIdByUsername(user.getName()));
+    }
+
+    @RequestMapping(path = "/readinglist", method = RequestMethod.DELETE)
+    public void deleteReadingList(@RequestBody int bookId, Principal user) {
+        dao.deleteFromReadingList(bookId, userDao.findIdByUsername(user.getName()));
+
+    }
+
+    @RequestMapping(path = "/readinglist", method = RequestMethod.GET)
+    public List<BookDto> getTheReadingList( Principal user ){
+        return dao.getReadingList(userDao.findIdByUsername(user.getName()));
     }
 
     @RequestMapping(path = "/search", method = RequestMethod.POST)
