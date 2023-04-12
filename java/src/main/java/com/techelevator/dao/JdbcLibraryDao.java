@@ -101,25 +101,8 @@ public class JdbcLibraryDao implements LibraryDao {
         SqlRowSet results = jdbcTemplate.queryForRowSet(Sql);
         while ( results.next()) {
             BookDto book = mapRowToBook(results);
-            String categoriesSql ="SELECT name " +
-                    "FROM categories " +
-                    "JOIN books_categories ON categories.category_id = books_categories.category_id " + "WHERE book_id = ?;";
-            SqlRowSet rowResults = jdbcTemplate.queryForRowSet(categoriesSql, book.getBookId());
-            List<String> categories = new ArrayList<>();
-            while (rowResults.next()){
-                categories.add(rowResults.getString("name"));
-            }
-            book.setCategories(categories.toArray(new String[0]));
-            String authorSql = " SELECT name " +
-                    "FROM authors " +
-                    "JOIN books_authors ON authors.author_id = books_authors.author_id " +
-                    "WHERE book_id = ?;";
-            SqlRowSet authorRow = jdbcTemplate.queryForRowSet(authorSql, book.getBookId());
-            List <String> authors = new ArrayList<>();
-            while (authorRow.next()){
-                authors.add(authorRow.getString("name"));
-            }
-            book.setAuthors(authors.toArray(new String[0]));
+            book.setCategories(getBookCategories(book.getBookId()).toArray(new String[0]));
+            book.setAuthors(getBookAuthors(book.getBookId()).toArray(new String[0]));
             books.add(book);
         }
         return books;
@@ -143,6 +126,41 @@ public class JdbcLibraryDao implements LibraryDao {
         return searchDate;
     }
 
+    @Override
+    public void addToReadingList(int bookId, int userId) {
+        List<BookDto> books = null;
+        String updateSql = " INSERT INTO reading_list (user_id, book_id) " +
+                "VALUES (?, ?); ";
+        jdbcTemplate.update(updateSql, userId, bookId);
+    }
+    @Override
+    public void deleteFromReadingList(int bookId, int userId){
+        String deleteSql = " DELETE FROM reading_list " +
+                "WHERE user_id = ? AND book_id = ?;";
+        jdbcTemplate.update(deleteSql, userId, bookId);
+    }
+    @Override
+    public List<BookDto> getReadingList(int userId) {
+        List<BookDto> getTheReadingList = new ArrayList<>();
+        String getReadingListSql = " SELECT books.title ,  books.date_added ,  books.isbn ,  books.page_count ,  " +
+                "books.description ,  books.publish_date ,  books.image_link, publishers.name, reading_list.read, books.book_id " +
+                "FROM reading_list " +
+                "JOIN books ON books.book_id = reading_list.book_id " +
+                "JOIN publishers ON books.publisher_id = publishers.publisher_id " +
+                "WHERE user_id = ?;";
+        SqlRowSet rowSet = jdbcTemplate.queryForRowSet(getReadingListSql, userId);
+        while (rowSet.next()) {
+            BookDto book = mapRowToBook(rowSet);
+            book.setRead(rowSet.getBoolean("read"));
+            book.setCategories(getBookCategories(book.getBookId()).toArray(new String[0]));
+            book.setAuthors(getBookAuthors(book.getBookId()).toArray(new String[0]));
+            getTheReadingList.add(book);
+
+        }
+
+        return getTheReadingList;
+    }
+
 
     private BookDto mapRowToBook(SqlRowSet results) {
         BookDto book = new BookDto();
@@ -157,5 +175,31 @@ public class JdbcLibraryDao implements LibraryDao {
         book.setBookId(results.getInt("book_id"));
         return book;
     }
+
+    private List<String> getBookCategories(int bookId) {
+
+         String categoriesSql = "SELECT name " +
+                 "FROM categories " +
+                 "JOIN books_categories ON categories.category_id = books_categories.category_id " + "WHERE book_id = ?;";
+         SqlRowSet rowResults = jdbcTemplate.queryForRowSet(categoriesSql, bookId);
+         List<String> categories = new ArrayList<>();
+         while (rowResults.next()) {
+             categories.add(rowResults.getString("name"));
+         }
+         return categories;
+     }
+
+     private List<String> getBookAuthors(int bookId) {
+         String authorSql = " SELECT name " +
+                 "FROM authors " +
+                 "JOIN books_authors ON authors.author_id = books_authors.author_id " +
+                 "WHERE book_id = ?;";
+         SqlRowSet authorRow = jdbcTemplate.queryForRowSet(authorSql, bookId);
+         List <String> authors = new ArrayList<>();
+         while (authorRow.next()){
+             authors.add(authorRow.getString("name"));
+         }
+         return authors;
+     }
 
 }

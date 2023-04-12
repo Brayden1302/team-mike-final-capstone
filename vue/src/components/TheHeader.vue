@@ -4,7 +4,9 @@
       <router-link v-bind:to="{ name: 'home' }">Home</router-link>&nbsp;|&nbsp;
       <router-link v-show="isAdmin" v-bind:to="{ name: 'addBook'}">Add Book</router-link>&nbsp;|&nbsp;
       <router-link v-bind:to="{ name: 'search'}">View Books</router-link>&nbsp;|&nbsp;
+      <router-link v-bind:to="{ name: 'readinglist'}" v-if="$store.state.token != ''" >View Reading List</router-link>&nbsp;|&nbsp;
       <router-link v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
+      
     </div>
 </template>
 
