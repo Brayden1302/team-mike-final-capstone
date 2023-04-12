@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -38,9 +39,12 @@ public class LibraryController {
     }
 
     @RequestMapping(path = "/search", method = RequestMethod.POST)
-    public Date userSearchDate(Principal user) {
+    public LocalDate userSearchDate(Principal user) {
         return dao.addSearchDate( user.getName());
-
+    }
+    @RequestMapping(path = "/search", method = RequestMethod.GET)
+    public LocalDate getUserSearchDate(Principal user) {
+        return dao.getUserSearchDate( user.getName());
     }
 
 

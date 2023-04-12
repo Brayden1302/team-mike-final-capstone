@@ -37,8 +37,8 @@
 
   <div class="form-group">
     <div class="custom-control custom-switch">
-  <input type="checkbox" class="custom-control-input" id="customSwitch1" v-model="newBooks" v-on:click="updateSearch()">
-  <label class="custom-control-label" for="customSwitch1">New Book(s)</label>
+  <input type="checkbox" class="custom-control-input" id="customSwitch1" v-model="newBooks" v-on:change="updateSearch()">
+  <label class="custom-control-label" for="customSwitch1" v-show="$store.state.token != ''">New arrivals</label>
 </div>
 
   </div>
@@ -47,6 +47,7 @@
     <div class="books">
       <div
         class="card"
+        id="book_card"
         style="width: 18rem"
         v-for="book in filteredBooks"
         v-bind:key="book.isbn"
@@ -54,7 +55,10 @@
         <img v-bind:src="book.imageLink" class="card-img-top" alt="..." />
         <div class="card-body">
           <h5 class="card-title">{{ book.title }}</h5>
-          <p class="card-text">{{ book.description }}</p>
+          <div>
+            <a  v-on:click.prevent="book.showDescription = !book.showDescription">Show description</a>
+          <p class="card-text" v-show="book.showDescription">{{ book.description }}</p>
+          </div>
         </div>
         <ul class="list-group list-group-flush">
           <li class="list-group-item">{{ "Pages: " + book.pageCount }}</li>
@@ -85,13 +89,17 @@ export default {
       },
       genres: [],
       newBooks: false,
-      lastSearchDate: ''
+      lastSearchDate: '',
+      showDescription: false
     };
   },
   created() {
     BookService.getbooks().then((response) => {
       this.books = response.data;
     });
+    BookService.getLastSearchDate().then( (response) => {
+      this.lastSearchDate = response.data
+    })
   },
   computed: {
       filteredBooks(){
@@ -127,19 +135,25 @@ export default {
               books = books.filter((book) => {
                   let containGenre = false;
                   this.genres.forEach((genre) =>{
-                    if ( book.categories.includes(genre) ){
+                    // if ( book.categories.includes(genre) ){
+                    //     containGenre = true;
+                    // }
+                    book.categories.forEach( category => {
+                      if (category.toLowerCase().includes(genre.toLowerCase())) {
                         containGenre = true;
-                    }
+                      }
+                    })
                    })
                    return containGenre;
               }) 
 
           }
           if (this.newBooks) {
-              books = books.filter(book => {
-                  return book.dateAdded >= this.lastSearchDate;
-              })
+            books = books.filter( (book) => {
+              return book.dateAdded >= this.lastSearchDate
+            })
           }
+          
           return books;
       }
   },
@@ -147,7 +161,7 @@ export default {
 methods: {
     updateSearch(){
     BookService.updateSearch(this.$store.state.token).then(response => {
-        this.lastSearchDate >= response.data;
+        this.lastSearchDate = response.data
     })
     }
 }
@@ -155,10 +169,19 @@ methods: {
 };
 </script>
 
-<style>
+<style scoped>
 .books {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
+}
+#book_card, .card > .list-group > li {
+  margin-bottom: 5%;
+  background-color: orange;
+  
+}
+.card {
+  border: 2px solid black;
+    box-shadow: 1px 1px;
 }
 </style>

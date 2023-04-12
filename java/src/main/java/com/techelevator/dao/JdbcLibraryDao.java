@@ -7,6 +7,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -124,16 +125,23 @@ public class JdbcLibraryDao implements LibraryDao {
     }
 
     @Override
-    public Date addSearchDate( String user) {
-        Date searchDate = null;
+    public LocalDate addSearchDate(String user) {
+        LocalDate searchDate = null;
         String searchSql = "select last_search from users where username = ?";
-
-
-        searchDate =  jdbcTemplate.queryForObject(searchSql, Date.class, user);
+        searchDate =  jdbcTemplate.queryForObject(searchSql, LocalDate.class, user);
         String updateSearch = "update users set last_search = current_date where username = ?";
         jdbcTemplate.update(updateSearch, user);
         return searchDate;
     }
+
+    @Override
+    public LocalDate getUserSearchDate(String username) {
+        LocalDate searchDate = null;
+        String searchSql = "select last_search from users where username = ?";
+        searchDate =  jdbcTemplate.queryForObject(searchSql, LocalDate.class, username);
+        return searchDate;
+    }
+
 
     private BookDto mapRowToBook(SqlRowSet results) {
         BookDto book = new BookDto();

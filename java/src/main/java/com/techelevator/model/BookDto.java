@@ -14,6 +14,15 @@ public class BookDto {
     String imageLink;
     Date dateAdded;
     int bookId;
+    boolean showDescription = false;
+
+    public boolean isShowDescription() {
+        return showDescription;
+    }
+
+    public void setShowDescription(boolean showDescription) {
+        this.showDescription = showDescription;
+    }
 
     public int getBookId() {
         return bookId;
