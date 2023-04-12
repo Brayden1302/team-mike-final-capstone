@@ -73,6 +73,7 @@
 
 <script>
 import BookService from "../services/BookService";
+import ReadingList from '../services/ReadingList';
 export default {
   data() {
     return {
@@ -95,7 +96,11 @@ export default {
     });
     BookService.getLastSearchDate().then( (response) => {
       this.lastSearchDate = response.data
+    });
+    ReadingList.getReadingList().then((response)=>{
+      this.$store.state.ReadingList = response.data
     })
+
   },
   computed: {
       filteredBooks(){
@@ -147,6 +152,7 @@ export default {
           
           return books;
       }
+
   },
 
 methods: {
@@ -154,7 +160,25 @@ methods: {
     BookService.updateSearch(this.$store.state.token).then(response => {
         this.lastSearchDate = response.data
     })
-    }
+    },
+    addToReadingList(bookid){
+      ReadingList.addToReadingList(bookid).then((response)=>{
+        if(response.status == 201){
+          this.$router.push({name: 'readlist'})
+        }
+
+      })
+    },
+    
+    deleteFromReadingList(bookid){
+      ReadingList.deletReadingList(bookid).then((response)=>{
+         if(response.status == 201){
+          this.$router.push({name: 'readlist'})
+        }
+
+      })
+}
+    
 }
 
 };

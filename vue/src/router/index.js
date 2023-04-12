@@ -7,6 +7,7 @@ import Register from '../views/Register.vue'
 import store from '../store/index'
 import AddBook from '../views/AddBook.vue'
 import Search from '../views/Search.vue'
+import ReadingList from '../views/ReadingList.vue'
 
 Vue.use(Router)
 
@@ -27,6 +28,14 @@ const router = new Router({
       path: '/',
       name: 'home',
       component: Home,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/readingList',
+      name: 'readinglist',
+      component: ReadingList,
       meta: {
         requiresAuth: true
       }
