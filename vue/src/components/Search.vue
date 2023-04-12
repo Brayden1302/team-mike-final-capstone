@@ -15,10 +15,7 @@
   </div>
   
   <div class="form-row">
-    <div class="form-group col-md-6">
-      <label for="isbn-input">ISBN</label>
-      <input type="text" class="form-control" v-model="filter.isbn" id="isbn-input" placeholder="isbn">
-    </div>
+    
     
     <div class="form-group col">
       <label for="keyword-input">Keyword</label>
@@ -83,8 +80,7 @@ export default {
       filter: {
           title: '',
           author: '',
-          keyword: '',
-          isbn: ''
+          keyword: ''
 
       },
       genres: [],
@@ -124,11 +120,6 @@ export default {
           if (this.filter.keyword != ''){
               books = books.filter((book) =>{
                  return book.description.toLowerCase().includes(this.filter.keyword.toLowerCase())
-              }) 
-          }
-          if (this.filter.isbn != ''){
-              books = books.filter((book) =>{
-                  return book.isbn.toLowerCase().includes(this.filter.isbn.toLowerCase())
               }) 
           }
           if (this.genres.length != 0) {
