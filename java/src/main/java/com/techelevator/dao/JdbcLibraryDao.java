@@ -87,6 +87,7 @@ public class JdbcLibraryDao implements LibraryDao {
             }
 
         }
+        book.setBookId(bookId);
 
         return book;
     }
