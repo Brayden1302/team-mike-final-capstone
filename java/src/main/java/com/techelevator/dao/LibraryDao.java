@@ -16,4 +16,5 @@ public interface LibraryDao {
     void deleteFromReadingList(int bookId, int userId);
     List<BookDto> getReadingList(int userId);
     List<String> getGenres();
+
 }

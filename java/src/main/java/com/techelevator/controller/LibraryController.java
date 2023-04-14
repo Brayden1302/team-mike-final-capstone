@@ -4,6 +4,7 @@ import com.techelevator.dao.LibraryDao;
 import com.techelevator.dao.UserDao;
 import com.techelevator.model.BookDto;
 import com.techelevator.model.DuplicateBookException;
+import com.techelevator.model.Forum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -68,6 +69,9 @@ public class LibraryController {
     public List<String> getGenres() {
         return dao.getGenres();
     }
+
+
+
 
 
 }
