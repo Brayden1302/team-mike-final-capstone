@@ -8,6 +8,7 @@ import store from '../store/index'
 import AddBook from '../views/AddBook.vue'
 import Search from '../views/Search.vue'
 import ReadingList from '../views/ReadingList.vue'
+import TestView from '../views/TestView.vue'
 
 Vue.use(Router)
 
@@ -30,6 +31,14 @@ const router = new Router({
       component: Home,
       meta: {
         requiresAuth: true
+      }
+    },
+    {
+      path: '/test',
+      name: 'test',
+      component: TestView,
+      meta: {
+        requiresAuth: false
       }
     },
     {

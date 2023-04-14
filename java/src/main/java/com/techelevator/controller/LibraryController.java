@@ -39,13 +39,13 @@ public class LibraryController {
         return dao.getBooks();
     }
 
-    @RequestMapping(path = "/readinglist", method = RequestMethod.POST)
-    public void updateReadingList(@RequestBody int bookId, Principal user) {
+    @RequestMapping(path = "/readinglist/{bookId}", method = RequestMethod.POST)
+    public void updateReadingList(@PathVariable int bookId, Principal user) {
          dao.addToReadingList(bookId, userDao.findIdByUsername(user.getName()));
     }
 
-    @RequestMapping(path = "/readinglist", method = RequestMethod.DELETE)
-    public void deleteReadingList(@RequestBody int bookId, Principal user) {
+    @RequestMapping(path = "/readinglist/{bookId}", method = RequestMethod.DELETE)
+    public void deleteReadingList(@PathVariable int bookId, Principal user) {
         dao.deleteFromReadingList(bookId, userDao.findIdByUsername(user.getName()));
 
     }
@@ -62,6 +62,11 @@ public class LibraryController {
     @RequestMapping(path = "/search", method = RequestMethod.GET)
     public LocalDate getUserSearchDate(Principal user) {
         return dao.getUserSearchDate( user.getName());
+    }
+
+    @RequestMapping(path = "/genres", method = RequestMethod.GET)
+    public List<String> getGenres() {
+        return dao.getGenres();
     }
 
 

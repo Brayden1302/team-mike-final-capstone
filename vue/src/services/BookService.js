@@ -18,6 +18,9 @@ export default {
     },
     getLastSearchDate() {
         return axios.get('/search')
+    },
+    getGenres() {
+        return axios.get('/genres')
     }
 
 }

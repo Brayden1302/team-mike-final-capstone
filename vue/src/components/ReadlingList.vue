@@ -1,12 +1,14 @@
 <template>
 
   <div>
+    
+    <h4 v-show="this.$store.state.readList.length == 0">No books in reading list</h4>
        <div class="books">
       <div
         class="card"
         id="book_card"
         style="width: 18rem"
-        v-for="book in books"
+        v-for="book in this.$store.state.readList"
         v-bind:key="book.isbn"
       >
         <img v-bind:src="book.imageLink" class="card-img-top" alt="..." />
@@ -23,20 +25,20 @@
           <li class="list-group-item">{{ "Isbn: " + book.isbn }}</li>
         </ul>
         <div class="card-body">
-          <a href="#" class="card-link">Card link</a>
-          <a href="#" class="card-link">Another link</a>
+          <div class="card-buttons">
+          <button type="button" class="btn btn-outline-danger">Remove</button>
+          <button class="btn btn-outline-success" type="button">Mark read</button>
+        </div>
         </div>
       </div>
        </div>
-
-      test
   </div>
   
 </template>
 
 <script>
 
-import ReadingList from '../services/ReadingList'
+// import ReadingList from '../services/ReadingList'
 export default {
     data() {
         return {
@@ -44,7 +46,6 @@ export default {
                 author: '',
                 title: '',
                 isbn: '',
-                books: []
             },
         }
     },
@@ -52,11 +53,11 @@ export default {
        
     },
     created(){
-        ReadingList.getReadingList().then((response)=>{
-          const books = response.data;
-          this.books= books;
-          this.$store.commit('set_books', books)
-        })
+        // ReadingList.getReadingList().then((response)=>{
+        //   const books = response.data;
+        //   this.$store.commit('set_books', books)
+        // })
+        
 
     }
 
@@ -64,8 +65,6 @@ export default {
 }
 </script>
 
-<style>
-
-
+<style scoped>
 
 </style>

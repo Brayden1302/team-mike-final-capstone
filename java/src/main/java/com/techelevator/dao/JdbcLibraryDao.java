@@ -129,8 +129,8 @@ public class JdbcLibraryDao implements LibraryDao {
     @Override
     public void addToReadingList(int bookId, int userId) {
         List<BookDto> books = null;
-        String updateSql = " INSERT INTO reading_list (user_id, book_id) " +
-                "VALUES (?, ?); ";
+        String updateSql = " INSERT INTO reading_list (user_id, book_id, read) " +
+                "VALUES (?, ?, false); ";
         jdbcTemplate.update(updateSql, userId, bookId);
     }
     @Override
@@ -159,6 +159,17 @@ public class JdbcLibraryDao implements LibraryDao {
         }
 
         return getTheReadingList;
+    }
+
+    @Override
+    public List<String> getGenres() {
+        List<String> genres = new ArrayList<>();
+        String genreSql = "SELECT name FROM categories";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(genreSql);
+        while (results.next()) {
+            genres.add(results.getString("name"));
+        }
+        return genres;
     }
 
 

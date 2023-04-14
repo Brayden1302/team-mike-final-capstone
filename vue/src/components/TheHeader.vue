@@ -1,13 +1,56 @@
 <template>
-  <div id="nav">
+  <div>
+      <nav class="navbar navbar-dark bg-dark">
+  <!-- Navbar content -->
+  <ul class="navbar-nav mr-auto">
       
-      <router-link v-bind:to="{ name: 'home' }">Home</router-link>&nbsp;|&nbsp;
-      <router-link v-show="isAdmin" v-bind:to="{ name: 'addBook'}">Add Book</router-link>&nbsp;|&nbsp;
-      <router-link v-bind:to="{ name: 'search'}">View Books</router-link>&nbsp;|&nbsp;
-      <router-link v-bind:to="{ name: 'readinglist'}" v-if="$store.state.token != ''" >View Reading List</router-link>&nbsp;|&nbsp;
-      <router-link v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
+      <li class="nav-item">
+        
+      </li>
+      <li class="nav-item navbar-dark">
+        
+      </li>
+      <li class="nav-item">
+        
+      </li>
+      <li class="nav-item">
+        
+      </li>
+      <li class="nav-item">
+        
+      </li>
       
-    </div>
+    </ul>     
+</nav>
+<nav class="navbar navbar-expand-lg navbar fixed-top navbar-custom">
+  <a class="navbar-brand" href="#">BookGo!</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+       <router-link class="nav-link" v-bind:to="{ name: 'home' }">Home <span class="sr-only">(current)</span></router-link>
+      </li>
+      <!-- <li class="nav-item">
+       <router-link class="nav-link" v-show="isAdmin" v-bind:to="{ name: 'addBook'}">Add Book</router-link>
+      </li> -->
+      <li class="nav-item">
+       <router-link class="nav-link" v-bind:to="{ name: 'search'}">View Books</router-link>
+      </li>
+      <li class="nav-item">
+       <!-- <router-link class="nav-link" v-bind:to="{ name: 'readinglist'}" v-if="$store.state.token != ''" >View Reading List</router-link>
+      </li> -->
+      <li class="nav-item">
+        <router-link class="nav-link" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
+      </li>
+      
+    </ul>
+  </div>
+</nav>
+  </div>  
+      
+   
 </template>
 
 <script>
@@ -38,6 +81,17 @@ export default {
 }
 </script>
 
-<style>
 
+<style scoped>
+  .nav-link {
+    font-size: 40px;
+    margin-right: 20px;
+    color: red;
+  }
+
+  nav {
+    background-color: gold;
+  }
+
+  
 </style>
