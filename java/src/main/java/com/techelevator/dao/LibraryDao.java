@@ -16,5 +16,9 @@ public interface LibraryDao {
     void deleteFromReadingList(int bookId, int userId);
     List<BookDto> getReadingList(int userId);
     List<String> getGenres();
+<<<<<<< HEAD
     void markBookRead(int bookId, int userId);
+=======
+
+>>>>>>> 56f7441f58010cf722ab700fa4cc85d797206c6a
 }
