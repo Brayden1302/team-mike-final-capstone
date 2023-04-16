@@ -172,6 +172,55 @@ public class JdbcLibraryDao implements LibraryDao {
         return genres;
     }
 
+    @Override
+    public void markBookRead(int bookId, int userId) {
+        String sql = "SELECT read FROM reading_list " +
+                "WHERE user_id = ? AND book_id = ?";
+
+        Boolean readStatus = jdbcTemplate.queryForObject(sql, Boolean.class, userId, bookId);
+
+        if (readStatus) {
+            String updateReadSql = "UPDATE reading_list " +
+                    "SET read = false " +
+                    "WHERE user_id = ? AND book_id = ?";
+            jdbcTemplate.update(updateReadSql, userId, bookId);
+        }
+        else {
+            String updateReadSql = "UPDATE reading_list " +
+                    "SET read = true " +
+                    "WHERE user_id = ? AND book_id = ?";
+            jdbcTemplate.update(updateReadSql, userId, bookId);
+        }
+    }
+
+    private List<String> getBookCategories(int bookId) {
+
+        String categoriesSql = "SELECT name " +
+                "FROM categories " +
+                "JOIN books_categories ON categories.category_id = books_categories.category_id " + "WHERE book_id = ?;";
+        SqlRowSet rowResults = jdbcTemplate.queryForRowSet(categoriesSql, bookId);
+        List<String> categories = new ArrayList<>();
+        while (rowResults.next()) {
+            categories.add(rowResults.getString("name"));
+        }
+        return categories;
+    }
+
+    private List<String> getBookAuthors(int bookId) {
+        String authorSql = " SELECT name " +
+                "FROM authors " +
+                "JOIN books_authors ON authors.author_id = books_authors.author_id " +
+                "WHERE book_id = ?;";
+        SqlRowSet authorRow = jdbcTemplate.queryForRowSet(authorSql, bookId);
+        List <String> authors = new ArrayList<>();
+        while (authorRow.next()){
+            authors.add(authorRow.getString("name"));
+        }
+        return authors;
+    }
+
+
+
 
     private BookDto mapRowToBook(SqlRowSet results) {
         BookDto book = new BookDto();
@@ -187,30 +236,6 @@ public class JdbcLibraryDao implements LibraryDao {
         return book;
     }
 
-    private List<String> getBookCategories(int bookId) {
 
-         String categoriesSql = "SELECT name " +
-                 "FROM categories " +
-                 "JOIN books_categories ON categories.category_id = books_categories.category_id " + "WHERE book_id = ?;";
-         SqlRowSet rowResults = jdbcTemplate.queryForRowSet(categoriesSql, bookId);
-         List<String> categories = new ArrayList<>();
-         while (rowResults.next()) {
-             categories.add(rowResults.getString("name"));
-         }
-         return categories;
-     }
-
-     private List<String> getBookAuthors(int bookId) {
-         String authorSql = " SELECT name " +
-                 "FROM authors " +
-                 "JOIN books_authors ON authors.author_id = books_authors.author_id " +
-                 "WHERE book_id = ?;";
-         SqlRowSet authorRow = jdbcTemplate.queryForRowSet(authorSql, bookId);
-         List <String> authors = new ArrayList<>();
-         while (authorRow.next()){
-             authors.add(authorRow.getString("name"));
-         }
-         return authors;
-     }
 
 }

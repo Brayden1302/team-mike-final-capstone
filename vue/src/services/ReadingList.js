@@ -10,6 +10,9 @@ export default {
     },
     getReadingList(){
         return axios.get('/readinglist')
+    },
+    markBookReadOrUnread(bookid) {
+        return axios.put(`/readinglist/${bookid}`)
     }
 
 }

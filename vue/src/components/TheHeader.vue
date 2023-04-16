@@ -6,8 +6,8 @@
       
       <li class="nav-item">
         
-      </li>
-      <li class="nav-item navbar-dark">
+      <!-- </li>
+      <li class="nav-item navbar-dark"> -->
         
       </li>
       <li class="nav-item">
@@ -84,13 +84,29 @@ export default {
 
 <style scoped>
   .nav-link {
-    font-size: 40px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 25px;
     margin-right: 20px;
-    color: red;
+    color: #FAF5E9 ;
+  }
+
+  .nav-link:hover {
+    color: #3C3744;
   }
 
   nav {
-    background-color: gold;
+    background-color: #28a745;
+  }
+
+  .navbar-brand {
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    text-transform: uppercase;;
+    font-size: 25px;
+    letter-spacing: 2px;
+    word-spacing: 2px;
+    font-weight: 800;
+    color: #FAF5E9;
+    font-size: 25px;
   }
 
   

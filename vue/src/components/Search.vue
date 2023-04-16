@@ -1,7 +1,9 @@
 <template>
   <div id="main">
+      <div class="list-title">
+    <h1>Reading List</h1>
+  </div>
 <div class="reading-list">
-  <h1>Reading List</h1>
 <div class="card" style="width: 12rem; ;" v-for="book in readingList" v-bind:key="book.bookId" id="reading-card">
   <img class="card-img-top" id="reading-img" v-bind:src="book.imageLink" alt="Card image cap">
   <div class="card-body">
@@ -9,9 +11,12 @@
   </div>
   <b-card-footer v-show="book.read" class="read">
     Read
+      
+  <b-button variant="outline-success" v-on:click="markBookReadUnread(book.bookId)">Button</b-button>
   </b-card-footer>
    <b-card-footer v-show="!book.read" class="not-read">
     Not read
+    <b-button variant="outline-danger" v-on:click="markBookReadUnread(book.bookId)">Button</b-button>
   </b-card-footer>
 </div>
 </div>
@@ -306,6 +311,15 @@ checkIfBookIsInReadingList(bookId) {
             BookService.addBook(book).then( response => {
               this.books.push(response.data)
             })
+        },
+        markBookReadUnread(bookId) {
+          ReadingList.markBookReadOrUnread(bookId).then( () => {
+            this.readingList.forEach( (book) => {
+              if (book.bookId == bookId) {
+                book.read = !book.read;
+              }
+            })
+          })
         }
     
 }
@@ -326,7 +340,7 @@ checkIfBookIsInReadingList(bookId) {
   display: flex;
   align-content: center;
   flex-wrap: wrap;
-  margin-top: 5%;
+  margin-top: 2vh;
   /* margin-left: 5%; */
   justify-content: space-around;
   /* margin-top: 5%; */
@@ -339,14 +353,14 @@ checkIfBookIsInReadingList(bookId) {
 }
 .card {
   display: flex;
-  border: 2px solid black;
+  /* border: 2px solid black; */
   /* offset-x | offset-y | blur-radius | color */
 box-shadow: 10px 5px 5px black;
   border-radius: 2%;
   /* margin: 5vw 5vw 5vh 5vh; */
 }
 .card-img-top {
-  width: auto;
+  
   border-radius: 2%;
 }
 
@@ -354,19 +368,42 @@ box-shadow: 10px 5px 5px black;
   margin-left: 40px;
 }
 
+.card-body {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+h5 {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.list-title {
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color: white;
+  display: flex;
+  justify-content: center;
+}
+
+h1 {
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 2.5em;
+}
+
 .reading-list {
-  margin-top: 10vh;
+  display: flex;
+  margin-top: 1vh;
   border: 11px solid #28a745;
   display: flex;
   justify-content: space-around;
   height: auto;
   background-color: #28a745;
+  
 }
 
 #buttons {
   display: flex;
   justify-content: center;
-  
+  margin-top: 2vh;
 }
 
 .btn-primary {
@@ -377,21 +414,28 @@ box-shadow: 10px 5px 5px black;
   justify-content: center;
   border-color: black;
   /* offset-x | offset-y | blur-radius | color */
-box-shadow: 6px 5px 5px black;
+  /* box-shadow: 6px 5px 5px black; */
+}
 
+.btn-primary:hover {
+  background-color: #28a745; 
 }
 
 #toggle-button {
-  color:cornsilk;
-
+  color:#FAF5E9;
 }
 
 .read {
   color: green;
+  
 }
 
 .not-read {
   color: red;
+}
+
+.read > button {
+  margin-left: 0px;
 }
 
  /* #28a745 #FFFF33 #FAF5E9 #F694C1 #3C3744 

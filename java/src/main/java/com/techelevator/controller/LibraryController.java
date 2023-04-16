@@ -55,6 +55,11 @@ public class LibraryController {
         return dao.getReadingList(userDao.findIdByUsername(user.getName()));
     }
 
+    @RequestMapping(path = "/readinglist/{id}", method = RequestMethod.PUT)
+    public void markBookReadNotRead(@PathVariable int id, Principal user) {
+         dao.markBookRead(id, userDao.findIdByUsername(user.getName()));
+    }
+
     @RequestMapping(path = "/search", method = RequestMethod.POST)
     public LocalDate userSearchDate(Principal user) {
         return dao.addSearchDate( user.getName());
@@ -68,6 +73,8 @@ public class LibraryController {
     public List<String> getGenres() {
         return dao.getGenres();
     }
+
+
 
 
 }
