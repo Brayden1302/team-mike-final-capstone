@@ -1,8 +1,10 @@
 package com.techelevator.dao;
 
 import com.techelevator.model.Forum;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
@@ -26,7 +28,6 @@ public class JdbcForumDao implements ForumDao{
         String forumSql ="INSERT INTO forum (forum_title, user_id, forum_description) " +
                 "VALUES (?, ?, ?) RETURNING forum_id;";
         forumId = jdbcTemplate.queryForObject(forumSql, Integer.class, forum.getForumName(), userId, forum.getForumDescription());
-        forum.setUserId(userId);
         forum.setForumId(forumId);
 
         return forum;
@@ -35,8 +36,9 @@ public class JdbcForumDao implements ForumDao{
     @Override
     public List<Forum> getForums() {
         List<Forum> forums = new ArrayList<>();
-        String sql = " SELECT forum_title, user_id, forum_description, forum_id " +
-                "FROM forum ";
+        String sql = " SELECT forum_title, users.username, forum_description, forum_id " +
+                "FROM forum " +
+                "JOIN users ON forum.user_id = users.user_id";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
         while ( results.next()) {
             Forum forum = mapRowToForum(results);
@@ -49,7 +51,7 @@ public class JdbcForumDao implements ForumDao{
         Forum forum = new Forum();
         forum.setForumDescription(results.getString("forum_description"));
         forum.setForumId(results.getInt("forum_id"));
-        forum.setUserId(results.getInt("user_id"));
+        forum.setUsernname(results.getString("username"));
         forum.setForumName(results.getString("forum_title"));
         return forum;
     }

@@ -3,8 +3,17 @@ package com.techelevator.model;
 public class Forum {
     private String forumName;
     private String forumDescription;
-    private int userId;
+    private String username;
     private int forumId;
+
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsernname(String usernname) {
+        this.username = usernname;
+    }
 
     public String getForumName() {
         return forumName;
@@ -20,14 +29,6 @@ public class Forum {
 
     public void setForumDescription(String forumDescription) {
         this.forumDescription = forumDescription;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public int getForumId() {

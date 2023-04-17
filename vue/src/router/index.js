@@ -9,6 +9,8 @@ import AddBook from '../views/AddBook.vue'
 import Search from '../views/Search.vue'
 import ReadingList from '../views/ReadingList.vue'
 import TestView from '../views/TestView.vue'
+import Forum from '../views/Forum.vue'
+import ForumContent from '../views/ForumContent.vue'
 
 Vue.use(Router)
 
@@ -31,6 +33,14 @@ const router = new Router({
       component: Home,
       meta: {
         requiresAuth: true
+      }
+    },
+    {
+      path: '/forum',
+      name: 'forum',
+      component: Forum,
+      meta: {
+        requiresAuth: false
       }
     },
     {
@@ -88,6 +98,11 @@ const router = new Router({
       meta: {
         requiresAuth: false
       }
+    },
+    {
+      path: '/forum/:forumId',
+      name: 'forum-messages',
+      component: ForumContent
     }
   ]
 })

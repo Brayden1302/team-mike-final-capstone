@@ -6,8 +6,8 @@
       
       <li class="nav-item">
         
-      <!-- </li>
-      <li class="nav-item navbar-dark"> -->
+      </li>
+      <li class="nav-item navbar-dark">
         
       </li>
       <li class="nav-item">
@@ -24,23 +24,29 @@
 </nav>
 <nav class="navbar navbar-expand-lg navbar fixed-top navbar-custom">
   <a class="navbar-brand" href="#">BookGo!</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation" v-on:click="expanded = !expanded">
+    
+<b-icon v-if="expanded" icon="chevron-bar-up"></b-icon>
+<b-icon v-else icon="chevron-bar-down"></b-icon>
+    
   </button>
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav">
       <li class="nav-item">
        <router-link class="nav-link" v-bind:to="{ name: 'home' }">Home <span class="sr-only">(current)</span></router-link>
       </li>
-      <!-- <li class="nav-item">
-       <router-link class="nav-link" v-show="isAdmin" v-bind:to="{ name: 'addBook'}">Add Book</router-link>
-      </li> -->
       <li class="nav-item">
        <router-link class="nav-link" v-bind:to="{ name: 'search'}">View Books</router-link>
       </li>
       <li class="nav-item">
-       <!-- <router-link class="nav-link" v-bind:to="{ name: 'readinglist'}" v-if="$store.state.token != ''" >View Reading List</router-link>
+       <router-link class="nav-link" v-bind:to="{ name: 'forum'}">Forums</router-link>
+      </li>
+      <!-- <li class="nav-item">
+       <router-link class="nav-link" v-bind:to="{ name: 'readinglist'}" v-if="$store.state.token != ''" >View Reading List</router-link>
       </li> -->
+      <li class="nav-item">
+       <router-link class="nav-link" v-show="$store.state.token == ''" v-bind:to="{name: 'login'}">Login</router-link>
+      </li>
       <li class="nav-item">
         <router-link class="nav-link" v-bind:to="{ name: 'logout' }" v-if="$store.state.token != ''">Logout</router-link>
       </li>
@@ -57,6 +63,11 @@
 
 export default {
     name: 'the-header',
+    data() {
+      return {
+        expanded: false
+      }
+    },
    computed: {
         isAdmin()  {
             const token = this.$store.state.token;
@@ -108,6 +119,12 @@ export default {
     color: #FAF5E9;
     font-size: 25px;
   }
+
+svg {
+  color: #FAF5E9;
+  height: 35px;
+  width: 35px
+}
 
   
 </style>

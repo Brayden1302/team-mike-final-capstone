@@ -1,23 +1,32 @@
 <template>
   <div id="main">
-      <div class="list-title">
+    <div class="heading">
+      <div class="list-title" id=list-title>
     <h1>Reading List</h1>
+    <div class="error-message" v-show="this.errorMessage != ''">
+    <p  >{{this.errorMessage}} <router-link v-bind:to="{ name: 'home' }">login here</router-link> </p>
+    </div>
   </div>
-<div class="reading-list">
+    </div>
+<div class="reading-list" v-show="$store.state.token != ''">
+  
+  <div id="reading-books">
 <div class="card" style="width: 12rem; ;" v-for="book in readingList" v-bind:key="book.bookId" id="reading-card">
+  <div>
   <img class="card-img-top" id="reading-img" v-bind:src="book.imageLink" alt="Card image cap">
+  <div class="book-read"  v-show="book.read"><p>You've read this book</p></div>
+  <div class="book-not-read"  v-show="!book.read"><p>You haven't read this book</p></div>
+  </div>
   <div class="card-body">
-    <h6 class="card-text">{{book.title}}</h6>
+    <strong class="card-text">{{book.title}}</strong>
   </div>
   <b-card-footer v-show="book.read" class="read">
-    Read
-      
-  <b-button variant="outline-success" v-on:click="markBookReadUnread(book.bookId)">Button</b-button>
+  <b-button variant="outline-danger" v-on:click="markBookReadUnread(book.bookId)">Mark not read</b-button>
   </b-card-footer>
    <b-card-footer v-show="!book.read" class="not-read">
-    Not read
-    <b-button variant="outline-danger" v-on:click="markBookReadUnread(book.bookId)">Button</b-button>
+    <b-button variant="outline-success" v-on:click="markBookReadUnread(book.bookId)">Mark read</b-button>
   </b-card-footer>
+  </div>
 </div>
 </div>
 
@@ -70,7 +79,7 @@
     </div>
   </div>
 </div>
-<form v-show="search">
+<form v-show="search" id="search-forum">
   <div class="form-row">
     <div class="form-group col-md-6">
       <label for="title-input">Title</label>
@@ -92,8 +101,9 @@
   </div>
     
 <div class="custom-control custom-checkbox custom-control-inline" v-for="genre in libraryGenres" v-bind:key="genre.id">
-  <input type="checkbox" class="custom-control-input" v-bind:id="genre" v-bind:value="genre" v-model="genres">
-  <label class="custom-control-label" v-bind:for="genre">{{genre}}</label>
+  <b-form-checkbox  v-model="genres" v-bind:value="genre" name="check-button" button button-variant="outline-info">
+      {{genre}}
+    </b-form-checkbox>
 </div>
 
   <div class="form-group">
@@ -101,7 +111,7 @@
 
   </div>
 </form>
-
+<h3 v-show="filteredBooks.length === 0" id="no-books">No books found</h3>
     
     <div class="books">
       <div
@@ -110,23 +120,51 @@
         style="width: 18rem"
         v-for="book in filteredBooks"
         v-bind:key="book.isbn"
+        v-on:click="toggleCard(book)"
       >
+      <div>
         <img v-bind:src="book.imageLink" class="card-img-top" alt="..." />
+      </div>
         <div class="card-body">
           <h5 class="card-title">{{ book.title }}</h5>
-          <div>
-            <a  v-on:click.prevent="book.showDescription = !book.showDescription">Show description</a>
-          <p class="card-text" v-show="book.showDescription">{{ book.description }}</p>
-          </div>
         </div>
         
         <ul class="list-group list-group-flush">
           <li class="list-group-item">{{ "Pages: " + book.pageCount }}</li>
-          <li class="list-group-item">{{ "Publisher: " + book.publisher }}</li>
-          <li class="list-group-item">{{ "Isbn: " + book.isbn }}</li>
+          <li class="list-group-item"><p v-for="author in book.authors" v-bind:key="author.name">Author(s): {{author}}</p></li>
+          <li class="list-group-item"><!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" :data-target="'#' + book.bookId">
+  More book info
+</button>
+
+<!-- Modal -->
+<div class="modal fade" :id="book.bookId" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">{{book.title}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <b-list-group>
+          <b-list-group-item><strong>Publisher: </strong>{{book.publisher}}</b-list-group-item>
+          <b-list-group-item><strong>Genre(s): </strong> <p v-for="genre in book.categories" v-bind:key="genre.name">{{genre}}</p></b-list-group-item>
+          <b-list-group-item><strong>Publish date: </strong>{{book.publishedDate}}</b-list-group-item>
+          <b-list-group-item><strong>Date Added: </strong>{{book.dateAdded}}</b-list-group-item>
+          <b-list-group-item><strong>Description: </strong>{{book.description}}</b-list-group-item>
+          </b-list-group>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div></li>
         </ul>
         <div class="card-body">
-          <button class="btn btn-outline-success" type="button" v-on:click.prevent="addToReadingList(book)" v-show="checkIfBookIsInReadingList(book.bookId)">Add to reading list</button>
+          <button class="btn btn-outline-success" type="button" v-on:click.prevent="addToReadingList(book)" v-show="checkIfBookIsInReadingList(book.bookId) && $store.state.token != ''">Add to reading list</button>
           <p v-show="!checkIfBookIsInReadingList(book.bookId)">Book already in reading list</p>
           
         </div>
@@ -159,7 +197,8 @@ export default {
         author: '',
         isbn: ''
       },
-      readingList: []
+      readingList: [],
+      errorMessage: ''
     };
   },
   created() {
@@ -168,14 +207,22 @@ export default {
     });
     BookService.getLastSearchDate().then( (response) => {
       this.lastSearchDate = response.data
+    }).catch(error => {
+      console.log(error)
     });
     
     BookService.getGenres().then( (response) => {
       this.libraryGenres = response.data
     });
     ReadingList.getReadingList().then((response)=>{
-            this.readingList = response.data
-    });
+      if (response.status == 200) {
+        this.readingList = response.data
+      }     
+    }).catch(error => {
+      if (error.response.status === 401) {
+        this.errorMessage = "You must be logged in to have a reading list"
+      }
+    })
 
   },
   computed: {
@@ -252,6 +299,9 @@ export default {
   },
 
 methods: {
+    toggleCard(book) {
+      book.cardFlipped = !book.cardFlipped
+    },
     updateSearch(){
     BookService.updateSearch(this.$store.state.token).then(response => {
         this.lastSearchDate = response.data
@@ -328,26 +378,23 @@ checkIfBookIsInReadingList(bookId) {
 </script>
 
 <style scoped>
-/* .books {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  grid-template-areas: "books books books";
-  margin-left: 5%;
-  margin-top: 5%;
-} */
 
 .books {
-  display: flex;
-  align-content: center;
-  flex-wrap: wrap;
-  margin-top: 2vh;
-  /* margin-left: 5%; */
-  justify-content: space-around;
-  /* margin-top: 5%; */
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  row-gap: 2%;
+  /* align-content: center;
+  flex-wrap: wrap; */
+  /* margin-top: 2vh; */
+  margin-left: 6%;
+  
+  /* justify-content: space-around; */
+  margin-top: 2%;
+  margin-bottom: 15%;
+  
 }
 
 #book_card {
-  margin-bottom: 5%;
   max-height: fit-content;
   /* max-width: fit-content; */
 }
@@ -356,16 +403,16 @@ checkIfBookIsInReadingList(bookId) {
   /* border: 2px solid black; */
   /* offset-x | offset-y | blur-radius | color */
 box-shadow: 10px 5px 5px black;
-  border-radius: 2%;
+  border-radius: 30px;
   /* margin: 5vw 5vw 5vh 5vh; */
+  transition: all .2s ease-in-out;
 }
+/* .card:hover { 
+transform: scale(1.02); 
+} */
 .card-img-top {
   
-  border-radius: 2%;
-}
-
-.btn-outline-success {
-  margin-left: 40px;
+  border-radius: 30px;
 }
 
 .card-body {
@@ -377,9 +424,34 @@ h5 {
   font-weight: bold;
 }
 
-.list-title {
+#list-title {
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   color: white;
+  text-align: center;
+  width: fit-content;
+}
+
+.error-message {
+  color: #ba3939;
+  background: #ffe0e0;
+  border: 1px solid #a33a3a;
+  height: fit-content;
+  width: fit-content;
+text-align: center;
+  border-radius: 30px;
+}
+
+.error-message > p {
+  margin-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#main {
+  text-align: center;
+}
+
+.heading {
   display: flex;
   justify-content: center;
 }
@@ -390,14 +462,17 @@ h1 {
 }
 
 .reading-list {
-  display: flex;
   margin-top: 1vh;
   border: 11px solid #28a745;
-  display: flex;
-  justify-content: space-around;
   height: auto;
   background-color: #28a745;
-  
+}
+
+#reading-books {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  margin-left: 5%;
+  row-gap: 20px;
 }
 
 #buttons {
@@ -434,8 +509,73 @@ h1 {
   color: red;
 }
 
-.read > button {
-  margin-left: 0px;
+.not-read > button, .read > button {
+  width: fit-content;
+}
+
+.book-read {
+  width: 190px;
+  height: 30px;
+  
+  /* transform: translate(0, 11px) rotate(-45deg); */
+  position: absolute;
+  top: 20px;
+  border-radius: 5px;
+  background-color: green;
+  color: #FAF5E9;
+  text-align: center;
+}
+
+.book-not-read {
+  width: 190px;
+  height: 30px;
+  
+  /* transform: translate(0, 11px) rotate(-45deg); */
+  position: absolute;
+  top: 20px;
+  border-radius: 5px;
+  background-color: red;
+  color: #FAF5E9;
+  text-align: center;
+}
+
+#no-books {
+  color: #FAF5E9;
+  font-size: 3em;
+}
+
+form {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  margin-left: 30px;
+  margin-right: 30px;
+  color: #FAF5E9;
+  text-align:left;
+}
+
+.rendered-form {
+  text-align: left;
+}
+
+@media screen and (max-width: 1684px) {
+ .books {
+   display: flex;
+   align-content: center;
+   justify-content: space-around;
+   flex-wrap: wrap;
+   margin-left: 0px;
+ }
+
+ #book_card {
+   margin-bottom: 2%;
+ }
+}
+
+@media screen and (max-width: 1130px) {
+   #reading-books {
+     margin-left: 8%;
+   grid-template-columns: 1fr 1fr 1fr;
+ }
 }
 
  /* #28a745 #FFFF33 #FAF5E9 #F694C1 #3C3744 

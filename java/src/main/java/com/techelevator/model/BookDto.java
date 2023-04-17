@@ -15,7 +15,15 @@ public class BookDto {
     Date dateAdded;
     int bookId;
     boolean read = false;
+    boolean cardFlipped = false;
 
+    public boolean isCardFlipped() {
+        return cardFlipped;
+    }
+
+    public void setCardFlipped(boolean cardFlipped) {
+        this.cardFlipped = cardFlipped;
+    }
 
     public boolean isRead() {
         return read;
@@ -23,16 +31,6 @@ public class BookDto {
 
     public void setRead(boolean read) {
         this.read = read;
-    }
-
-    boolean showDescription = false;
-
-    public boolean isShowDescription() {
-        return showDescription;
-    }
-
-    public void setShowDescription(boolean showDescription) {
-        this.showDescription = showDescription;
     }
 
     public int getBookId() {
