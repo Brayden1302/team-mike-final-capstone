@@ -76,6 +76,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.forum-info {
+    color: #FAF5E9
+}
 </style>
