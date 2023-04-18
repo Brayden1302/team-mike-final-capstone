@@ -15,7 +15,7 @@ export default {
 
 <style scoped>
 #app {
-  background-color: #3C3744;
+  background: #3C3744;
   padding-top: 70px;
 }
 </style>

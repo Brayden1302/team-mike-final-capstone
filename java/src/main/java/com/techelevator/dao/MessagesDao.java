@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface MessagesDao {
 
-    Messages addMessages (Messages messages, int userId);
-    List<Messages> getMessages();
+    Messages addMessages (Messages messages, int userId, int forumId);
+    List<Messages> getMessages(int id);
 }

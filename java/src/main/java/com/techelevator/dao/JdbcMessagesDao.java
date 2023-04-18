@@ -17,24 +17,27 @@ public class JdbcMessagesDao implements MessagesDao{
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
     @Override
-    public Messages addMessages(Messages messages, int userId) {
+    public Messages addMessages(Messages messages, int userId, int forum_id) {
        Integer messagesId = null;
        String getMessagesSql = "INSERT INTO messages (forum_id, user_id, message_content) " +
                "VALUES (?, ?, ?) RETURNING message_id;";
-        messagesId  = jdbcTemplate.queryForObject(getMessagesSql, Integer.class, messages.getForumId(), userId, messages.getMessageContent());
+        messagesId  = jdbcTemplate.queryForObject(getMessagesSql, Integer.class, forum_id, userId, messages.getMessageContent());
         messages.setMessageId(messagesId);
-        messages.setUserId(userId);
+        messages.setForumId(forum_id);
         return messages;
     }
 
     @Override
-    public List<Messages> getMessages() {
+    public List<Messages> getMessages(int forumId) {
         List<Messages> messages = new ArrayList<>();
-        String sql = "SELECT  forum_id, user_id, message_content " +
-                "FROM messages";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+        String sql = "SELECT forum_id, username, message_content, message_id " +
+                "FROM messages " +
+                "JOIN users ON users.user_id = messages.user_id " +
+                "WHERE forum_id = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, forumId);
         while ( results.next()) {
             Messages message = mapRowToMessages(results);
+            message.setForumId(forumId);
             messages.add(message);
 
         }
@@ -43,7 +46,7 @@ public class JdbcMessagesDao implements MessagesDao{
 
     private Messages mapRowToMessages(SqlRowSet results) {
         Messages messages = new Messages();
-        messages.setUserId(results.getInt("user_id"));
+        messages.setUsername(results.getString("username"));
         messages.setForumId(results.getInt("forum_id"));
         messages.setMessageId(results.getInt("message_id"));
         messages.setMessageContent(results.getString("message_content"));

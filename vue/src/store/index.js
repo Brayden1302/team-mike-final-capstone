@@ -20,7 +20,8 @@ export default new Vuex.Store({
   state: {
     token: currentToken || '',
     user: currentUser || {},
-    readList: []
+    readList: [],
+    forums: []
   },
   mutations: {
     SET_AUTH_TOKEN(state, token) {
@@ -53,8 +54,9 @@ export default new Vuex.Store({
     },
     set_books(state, readinglist){
       state.readList = readinglist;
-      
-     
+    },
+    SET_FORUMS(state, forums) {
+      state.forums = forums;
     }
 
    

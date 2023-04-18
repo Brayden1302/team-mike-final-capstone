@@ -3,7 +3,7 @@ package com.techelevator.model;
 public class Messages {
     private int messageId;
     private int forumId;
-    private int userId;
+    private String username;
     private String messageContent;
 
     public int getMessageId() {
@@ -22,12 +22,12 @@ public class Messages {
         this.forumId = forumId;
     }
 
-    public int getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getMessageContent() {
