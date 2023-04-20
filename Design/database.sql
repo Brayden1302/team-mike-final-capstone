@@ -1,6 +1,8 @@
 BEGIN TRANSACTION;
 
-DROP TABLE IF EXISTS users_books;
+DROP TABLE IF EXISTS messages;
+DROP TABLE IF EXISTS forum;
+DROP TABLE IF EXISTS reading_list;
 DROP TABLE IF EXISTS books_authors;
 DROP TABLE IF EXISTS books_categories;
 DROP TABLE IF EXISTS authors;
@@ -21,16 +23,7 @@ CREATE TABLE books
 	image_link varchar(200),
 	
 	CONSTRAINT pk_books PRIMARY KEY (book_id)
-);
-
-CREATE TABLE users_books
-(
-	user_id int NOT NULL,
-	book_id int NOT NULL,
 	
-	CONSTRAINT pk_users_books PRIMARY KEY (user_id, book_id),
-	CONSTRAINT fk_users_books_users FOREIGN KEY (user_id) REFERENCES users (user_id),
-	CONSTRAINT fk_users_books_books FOREIGN KEY (book_id) REFERENCES books (book_id)
 );
 
 CREATE TABLE authors
@@ -77,7 +70,45 @@ CREATE TABLE publishers
 	CONSTRAINT pk_publishers PRIMARY KEY (publisher_id)
 );
 
+CREATE TABLE reading_list
+(
+	user_id int NOT NULL,
+	book_id int NOT NULL,
+	read boolean NOT NULL,
+	
+	CONSTRAINT pk_reading_list PRIMARY KEY (user_id, book_id),
+	CONSTRAINT fk_reading_list_users FOREIGN KEY (user_id) REFERENCES users (user_id),
+	CONSTRAINT fk_reading_list_books FOREIGN KEY (book_id) REFERENCES books (book_id)
+);
+
+CREATE TABLE forum
+(
+	forum_id serial,
+	user_id int NOT NULL,
+	forum_title varchar(500) NOT NULL,
+	forum_description varchar(1000) NOT NULL,
+	
+	CONSTRAINT pk_forum PRIMARY KEY (forum_id),
+	CONSTRAINT fk_forum_users FOREIGN KEY (user_id) REFERENCES users (user_id)
+
+);
+
+CREATE TABLE messages
+(
+	message_id serial,
+	user_id int NOT NULL,
+	forum_id int NOT NULL,
+	message_content varchar(1000) NOT NULL,
+	
+	CONSTRAINT pk_messages PRIMARY KEY (message_id),
+	CONSTRAINT fk_messages_users FOREIGN KEY (user_id) REFERENCES users (user_id),
+	CONSTRAINT fk_messages_forum FOREIGN KEY (forum_id) REFERENCES forum (forum_id)
+
+);
+
 COMMIT;
 
-SELECT * FROM books
+
+
+
 
