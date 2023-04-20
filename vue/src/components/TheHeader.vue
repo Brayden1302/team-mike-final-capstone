@@ -1,29 +1,8 @@
 <template>
   <div>
-      <nav class="navbar navbar-dark bg-dark">
-  <!-- Navbar content -->
-  <ul class="navbar-nav mr-auto">
       
-      <li class="nav-item">
-        
-      </li>
-      <li class="nav-item navbar-dark">
-        
-      </li>
-      <li class="nav-item">
-        
-      </li>
-      <li class="nav-item">
-        
-      </li>
-      <li class="nav-item">
-        
-      </li>
-      
-    </ul>     
-</nav>
-<nav class="navbar navbar-expand-lg navbar fixed-top navbar-custom">
-  <a class="navbar-brand" href="#">BookGo!</a>
+<nav class="navbar navbar-expand-lg navbar fixed-top navbar-custom" id="main-nav-bar">
+  <a class="navbar-brand" href="#">Library|Oasis</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation" v-on:click="expanded = !expanded">
     
 <b-icon v-if="expanded" icon="chevron-bar-up"></b-icon>
@@ -36,7 +15,7 @@
        <router-link class="nav-link" v-bind:to="{ name: 'home' }">Home <span class="sr-only">(current)</span></router-link>
       </li>
       <li class="nav-item">
-       <router-link class="nav-link" v-bind:to="{ name: 'search'}">View Books</router-link>
+       <router-link class="nav-link" v-bind:to="{ name: 'search'}">Books</router-link>
       </li>
       <li class="nav-item">
        <router-link class="nav-link" v-bind:to="{ name: 'forum'}">Forums</router-link>
@@ -94,8 +73,12 @@ export default {
 
 
 <style scoped>
+.hidden {
+  display: none;
+}
+
   .nav-link {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 25px;
     margin-right: 20px;
     color: #FAF5E9 ;
@@ -110,8 +93,8 @@ export default {
   }
 
   .navbar-brand {
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    text-transform: uppercase;;
+    font-family: 'Poppins', sans-serif;
+    text-transform: uppercase;
     font-size: 25px;
     letter-spacing: 2px;
     word-spacing: 2px;

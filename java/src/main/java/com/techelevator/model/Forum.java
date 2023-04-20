@@ -5,14 +5,22 @@ public class Forum {
     private String forumDescription;
     private String username;
     private int forumId;
+    private int messageCount;
 
+    public int getMessageCount() {
+        return messageCount;
+    }
+
+    public void setMessageCount(int messageCount) {
+        this.messageCount = messageCount;
+    }
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsernname(String usernname) {
-        this.username = usernname;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getForumName() {

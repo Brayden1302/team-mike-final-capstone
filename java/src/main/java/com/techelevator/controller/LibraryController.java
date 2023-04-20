@@ -46,6 +46,7 @@ public class LibraryController {
     public void updateReadingList(@PathVariable int bookId, Principal user) {
          dao.addToReadingList(bookId, userDao.findIdByUsername(user.getName()));
     }
+
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(path = "/readinglist/{bookId}", method = RequestMethod.DELETE)
     public void deleteReadingList(@PathVariable int bookId, Principal user) {

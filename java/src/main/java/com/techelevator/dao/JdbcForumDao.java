@@ -51,7 +51,7 @@ public class JdbcForumDao implements ForumDao{
         Forum forum = new Forum();
         forum.setForumDescription(results.getString("forum_description"));
         forum.setForumId(results.getInt("forum_id"));
-        forum.setUsernname(results.getString("username"));
+        forum.setUsername(results.getString("username"));
         forum.setForumName(results.getString("forum_title"));
         return forum;
     }

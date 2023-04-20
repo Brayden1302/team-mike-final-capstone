@@ -31,7 +31,7 @@ public class ForumController {
     @RequestMapping(path = "/forum", method = RequestMethod.POST)
     public Forum addForum(@RequestBody Forum forum, Principal user) {
         Forum addedForum = dao.addForum(forum, userDao.findIdByUsername(user.getName()));
-        addedForum.setUsernname(user.getName());
+        addedForum.setUsername(user.getName());
         return addedForum;
     }
 

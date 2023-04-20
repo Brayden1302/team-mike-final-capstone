@@ -1,6 +1,6 @@
 <template>
   <div id="login">
-    <form @submit.prevent="login">
+    <!-- <form @submit.prevent="login">
       <h1 >Please Sign In</h1>
       <div role="alert" v-if="invalidCredentials">
         Invalid username and password!
@@ -19,7 +19,30 @@
       <button type="submit">Sign in</button>
       <p>
       <router-link :to="{ name: 'register' }">Need an account? Sign up.</router-link></p>
-    </form>
+    </form> -->
+
+<form class="login" @submit.prevent="login">
+  <h1 >Please Sign In</h1>
+  <div role="alert" v-if="invalidCredentials">
+        Invalid username and password!
+      </div>
+      <div role="alert" v-if="this.$route.query.registration">
+        Thank you for registering, please sign in.
+      </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Username</label>
+    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="user.username" required autofocus placeholder="Enter username">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" v-model="user.password" required placeholder="Password">
+  </div>
+
+  <button type="submit" class="btn btn-primary">Sign In</button>
+  <p>
+      <router-link :to="{ name: 'register' }">Need an account? Sign up.</router-link></p>
+</form>
+
   </div>
 </template>
 
@@ -62,6 +85,17 @@ export default {
 </script>
 
 <style scoped>
+.login {
+  margin-left: 40%;
+  margin-right: 40%;
+}
+#login {
+  margin-top: 2%;
+  margin-bottom: 5%;
+  height: 50vh;
+  color: #faf5e9
+}
+
 .form-input-group {
   margin-bottom: 1rem;
 }

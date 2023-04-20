@@ -1,30 +1,48 @@
 <template>
-<div>
-
-</div>
+  <div>
+    <b-table striped hover :items="forums" :fields="fields"></b-table>
+  </div>
 </template>
 
 <script>
-import BookService from '../services/BookService.js'
-export default {
+  export default {
     data() {
-        return {
-            info: '',
-        }
-    },
-    methods: {
-        getBook() {
-            BookService.getBookFromAPI('harry potter and the goblet of fire').then( response => {
-                this.info = response.data;
-            })
-        }
-    },
-    created() {
-        this.getBook()
+      return {
+        // Note 'isActive' is left out and will not appear in the rendered table
+        fields: [
+          {
+            key: 'last_name',
+            sortable: true
+          },
+          {
+            key: 'first_name',
+            sortable: false
+          },
+          {
+            key: 'age',
+            label: 'Person age',
+            sortable: true,
+            // Variant applies to the whole column, including the header and footer
+            variant: 'danger'
+          }
+        ],
+        forums: [
+          { isActive: true, age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
+          { isActive: false, age: 21, first_name: 'Larsen', last_name: 'Shaw' },
+          { isActive: false, age: 89, first_name: 'Geneva', last_name: 'Wilson' },
+          { isActive: true, age: 38, first_name: 'Jami', last_name: 'Carney' }
+        ]
+      }
     }
-}
+  }
 </script>
 
-<style>
 
-</style>
+
+
+
+
+
+
+
+ 

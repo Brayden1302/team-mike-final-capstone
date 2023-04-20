@@ -11,6 +11,7 @@ import ReadingList from '../views/ReadingList.vue'
 import TestView from '../views/TestView.vue'
 import Forum from '../views/Forum.vue'
 import ForumContent from '../views/ForumContent.vue'
+import AboutUs from '../views/AboutUs.vue'
 
 Vue.use(Router)
 
@@ -32,7 +33,7 @@ const router = new Router({
       name: 'home',
       component: Home,
       meta: {
-        requiresAuth: true
+        requiresAuth: false
       }
     },
     {
@@ -63,6 +64,14 @@ const router = new Router({
       path: '/books',
       name: 'search',
       component: Search,
+      meta: {
+        requiresAuth: false
+      }
+    },
+    {
+      path: '/about',
+      name: 'about',
+      component: AboutUs,
       meta: {
         requiresAuth: false
       }

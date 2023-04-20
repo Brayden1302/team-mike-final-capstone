@@ -20,6 +20,30 @@
       <button type="submit">Create Account</button>
       <p><router-link :to="{ name: 'login' }">Already have an account? Log in.</router-link></p>
     </form>
+
+<form class="login" @submit.prevent="register">
+  <h1>Create Account</h1>
+      <div role="alert" v-if="registrationErrors">
+        {{ registrationErrorMsg }}
+      </div>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Username</label>
+    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="user.username" required autofocus placeholder="Enter username">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" v-model="user.password" required placeholder="Password">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword2">Confirm Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword2" v-model="user.confirmPassword" required placeholder="Password">
+  </div>
+
+  <button type="submit" class="btn btn-primary">Create Account</button>
+ <p><router-link :to="{ name: 'login' }">Already have an account? Log in.</router-link></p>
+</form>
+
+
   </div>
 </template>
 
@@ -79,5 +103,10 @@ export default {
 }
 label {
   margin-right: 0.5rem;
+}
+
+#register {
+  margin-left: 40%;
+  margin-right: 40%;
 }
 </style>

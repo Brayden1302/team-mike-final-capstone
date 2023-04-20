@@ -16,6 +16,15 @@ public class BookDto {
     int bookId;
     boolean read = false;
     boolean cardFlipped = false;
+    int list = 2;
+
+    public int getList() {
+        return list;
+    }
+
+    public void setList(int list) {
+        this.list = list;
+    }
 
     public boolean isCardFlipped() {
         return cardFlipped;
